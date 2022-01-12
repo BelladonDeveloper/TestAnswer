@@ -107,9 +107,17 @@ public class SelectionTable : MonoBehaviour
     /// </summary>
     public void RemoveSelected()
     {
-        heroes.RemoveAt(int.Parse(selectedObjectInfo.gameObject.name));
-        RefreshTable();
-        showObject.ClearShowPanel();
+        if (selectedObjectInfo)
+        {
+            heroes.RemoveAt(int.Parse(selectedObjectInfo.gameObject.name));
+            selectedObjectInfo = null;
+            RefreshTable();
+            showObject.ClearShowPanel();
+        }
+        else
+        {
+            print("Select object");
+        }
     }
 
     private void OnDestroy()

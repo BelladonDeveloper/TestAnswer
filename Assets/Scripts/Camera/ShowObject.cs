@@ -1,12 +1,16 @@
 using UnityEngine;
-using DG.Tweening;
 
 public class ShowObject : MonoBehaviour
 {
     // speed for rotation
-    public float speed = 55f;
+    public float speed = 0.9f;
 
     private GameObject objectForShowing;
+
+    private void FixedUpdate()
+    {
+        transform.rotation *= Quaternion.Euler(Vector3.up * speed);
+    }
 
     /// <summary>
     /// Show new object at panel view
@@ -23,16 +27,8 @@ public class ShowObject : MonoBehaviour
         // Create new object form prefab
         objectForShowing = Instantiate(showedObject, transform);
 
-        RotateThis();
-    }
-
-    /// <summary>
-    /// Rotate this container and child object
-    /// </summary>
-    private void RotateThis()
-    {
-        // Rotate with tweening
-         transform.DORotate(Vector3.up * 360f, 55f, RotateMode.FastBeyond360).SetLoops(-1).SetSpeedBased(true).SetEase(Ease.Linear);
+        // Start rotation with forward
+        transform.rotation = Quaternion.identity;
     }
 
     /// <summary>
@@ -41,24 +37,5 @@ public class ShowObject : MonoBehaviour
     public void ClearShowPanel()
     {
         Destroy(objectForShowing);
-    }
-
-    private void OnEnable()
-    {
-        ObjectInfoRow.selectRow += StopTweening;
-    }
-
-    /// <summary>
-    /// Stop last rotation when player change object for showing
-    /// </summary>
-    /// <param name="obj"></param>
-    private void StopTweening(ObjectInfoRow obj)
-    {
-        DOTween.Kill(this);
-    }
-
-    private void OnDestroy()
-    {
-        ObjectInfoRow.selectRow -= StopTweening;
     }
 }
